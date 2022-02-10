@@ -12,6 +12,17 @@ export default class Recipe {
     this.ingredientList = []
     this.recipesToDisplay = []
     this.displayedRecipe = [] // liste des recettes affichées
+    this.setIngredientList()
+  }
+
+  /**
+   * créée la liste des ingrédients
+   * @returns
+   */
+  setIngredientList () {
+    this.ingredients.forEach(item => {
+      this.ingredientList.push(item.ingredient.toLowerCase())
+    })
   }
 
   /**
@@ -73,7 +84,6 @@ export default class Recipe {
       const pName = document.createElement('p')
       pName.setAttribute('class', 'nameIngredient')
       pName.textContent = item.ingredient
-      this.ingredientList.push(item.ingredient.toLowerCase())
       liIngredient.appendChild(pName)
       if (item.quantity) {
         pName.textContent = item.ingredient + ':'

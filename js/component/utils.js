@@ -1,27 +1,49 @@
-import { ingredientsClass, applianceClass, ustensilsClass } from '../index.js'
+import { ingredientsClass, applianceClass, ustensilsClass, mainSearchClass } from '../index.js'
+
+/**
+ * Sélectionne les recettes correspondant à tous les filtres
+ */
+function selectRecipes () {
+  let ingredientApplianceArray = []
+  let ingrApplUstArray = []
+  let ingrApplUstMainArray = []
+  const recipeToDisplay = []
+  ingredientApplianceArray = ingredientsClass.filteredRecipes.filter(recipe => applianceClass.filteredRecipes.includes(recipe))
+  if (ingredientApplianceArray.length === 0) {
+    return recipeToDisplay
+  } else {
+    ingrApplUstArray = ingredientApplianceArray.filter(recipe => ustensilsClass.filteredRecipes.includes(recipe))
+    if (ingrApplUstArray.length === 0) {
+      return recipeToDisplay
+    } else {
+      ingrApplUstMainArray = ingrApplUstArray.filter(recipe => mainSearchClass.filteredRecipes.includes(recipe))
+      if (ingrApplUstMainArray.length === 0) {
+        return recipeToDisplay
+      } else {
+        ingrApplUstMainArray.forEach(recipe => {
+          recipeToDisplay.push(recipe)
+        })
+      }
+    }
+  }
+  return recipeToDisplay
+}
 
 /**
  * Supprime les recettes et affiche seulement celles filtrées
  */
-export function displayFilteredRecipes () {
+export function displayFilteredRecipes (recipeToDisplay = selectRecipes()) {
   const divRecipes = document.getElementsByClassName('recipes')[0]
   divRecipes.innerHTML = ''
-  let ingredientApplianceArray = []
-  let ingrApplUstArray = []
-  ingredientApplianceArray = ingredientsClass.filteredRecipes.filter(recipe => applianceClass.filteredRecipes.includes(recipe))
-  if (ingredientApplianceArray.length === 0) {
+  console.log('length', recipeToDisplay.length)
+  if (recipeToDisplay.length === 0) {
     divRecipes.innerHTML = '<p> Aucune recette correspondante</p>'
   } else {
-    ingrApplUstArray = ingredientApplianceArray.filter(recipe => ustensilsClass.filteredRecipes.includes(recipe))
-    if (ingrApplUstArray.length === 0) {
-      divRecipes.innerHTML = '<p> Aucune recette correspondante</p>'
-    } else {
-      ingrApplUstArray.forEach(recipe => {
-        divRecipes.appendChild(recipe.recipeFactory())
-      })
-    }
+    recipeToDisplay.forEach(recipe => {
+      divRecipes.appendChild(recipe.recipeFactory())
+    })
   }
-  updateTags(ingrApplUstArray)
+  updateTags(recipeToDisplay)
 }
 
 /*
@@ -36,9 +58,9 @@ function updateTags (ingrApplUstArray) {
   ingrApplUstArray.forEach(recipe => {
     // ingrédients
     recipe.ingredients.forEach(ingredient => {
-      const oneIngredient = ingredient.ingredient
+      const oneIngredient = ingredient.ingredient.toLowerCase()
       if (ingredientsClass.selectedIngredients.has(oneIngredient) === false) {
-        ingredientDisplayed.add(oneIngredient[0].toUpperCase() + oneIngredient.substring(1).toLowerCase())
+        ingredientDisplayed.add(oneIngredient.toLowerCase())
       }
     })
 

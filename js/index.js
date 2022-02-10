@@ -5,6 +5,8 @@ import Ingredients from './factory/ingredient.js'
 import Appliance from './factory/appliance.js'
 import Ustensil from './factory/ustensil.js'
 
+import MainSearch from './factory/mainSearch.js'
+
 console.table(recipes)
 
 export const recipesArray = []
@@ -15,6 +17,9 @@ const divRecipes = document.getElementsByClassName('recipes')[0]
 export const ingredientsClass = new Ingredients()
 export const applianceClass = new Appliance()
 export const ustensilsClass = new Ustensil()
+
+// initialisation de la recherche principale
+export const mainSearchClass = new MainSearch()
 
 // initialisation des recettes et du tableau recettes affichées
 // initialisation des recettes filtrées selon les tags
